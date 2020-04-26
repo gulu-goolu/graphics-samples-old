@@ -140,6 +140,25 @@ void Device::flush_transient(VkCommandBuffer command_buffer) {
     data_->transient_command_buffers_.erase(command_buffer);
 }
 
+uint32_t Device::get_memory_type(uint32_t type_bits,
+    VkMemoryPropertyFlags property_flags) const {
+    VkPhysicalDeviceMemoryProperties memoryProperties = {};
+    vkGetPhysicalDeviceMemoryProperties(
+        data_->vk_physical_device, &memoryProperties);
+
+    for (uint32_t i = 0; i < memoryProperties.memoryTypeCount; i++) {
+        if ((type_bits & 1U) == 1) {
+            // Type is available, does it match user properties?
+            if ((memoryProperties.memoryTypes[i].propertyFlags &
+                    property_flags) == property_flags) {
+                return i;
+            }
+        }
+        type_bits >>= 1U;
+    }
+    return UINT32_MAX;
+}
+
 Device::Device() {
     data_ = new DeviceData;
 

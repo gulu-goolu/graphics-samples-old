@@ -25,6 +25,9 @@ public:
     [[nodiscard]] VkCommandBuffer begin_transient_universal();
     void flush_transient(VkCommandBuffer command_buffer);
 
+    [[nodiscard]] uint32_t get_memory_type(uint32_t type_bits,
+        VkMemoryPropertyFlags property_flags) const;
+
 private:
     Device();
     ~Device();
