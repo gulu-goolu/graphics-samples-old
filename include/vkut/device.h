@@ -18,6 +18,12 @@ public:
     static Device *get();
 
     [[nodiscard]] const VkInstance &vk_instance() const;
+    [[nodiscard]] const VkPhysicalDevice &vk_physical_device() const;
+    [[nodiscard]] const VkDevice &vk_device() const;
+
+    [[nodiscard]] VkCommandBuffer begin_transient(uint32_t family);
+    [[nodiscard]] VkCommandBuffer begin_transient_universal();
+    void flush_transient(VkCommandBuffer command_buffer);
 
 private:
     Device();
