@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 project(vkut)
 
 set(VKUT_SRCS
+        src/utility.cpp
         src/device.cpp
         src/buffer.cpp
         src/image.cpp
@@ -9,8 +10,8 @@ set(VKUT_SRCS
         src/pipeline.cpp
         src/renderpass.cpp
         src/commandbuffer.cpp
-        src/framegraph.cpp
-        src/utility.cpp)
+        src/swapchain.cpp
+        src/framegraph.cpp)
 
 add_library(vkut ${VKUT_SRCS})
 target_include_directories(vkut
