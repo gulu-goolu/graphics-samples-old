@@ -14,6 +14,12 @@ using BufferPtr = std::shared_ptr<Buffer>;
 
 class Buffer {
 public:
+    static BufferPtr create(VkDeviceSize size,
+        VkBufferUsageFlags usage,
+        VkMemoryPropertyFlags memory_flags) {
+        return std::make_shared<Buffer>(size, usage, memory_flags);
+    }
+
     explicit Buffer(VkDeviceSize size,
         VkBufferUsageFlags usage,
         VkMemoryPropertyFlags memory_flags);
