@@ -12,6 +12,7 @@
 #include "vkut/image.h"
 #include "vkut/pipeline.h"
 #include "vkut/renderpass.h"
+#include "vkut/swapchain.h"
 #include "vkut/utility.h"
 
 #endif

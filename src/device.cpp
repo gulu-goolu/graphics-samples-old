@@ -235,4 +235,12 @@ Device::~Device() {
     delete data_;
 }
 
+uint32_t DeviceResource::add_ref() {
+    return ++ref_count_;
+}
+
+uint32_t DeviceResource::release() {
+    return --ref_count_;
+}
+
 }

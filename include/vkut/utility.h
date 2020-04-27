@@ -7,6 +7,11 @@
 
 #include <vulkan/vulkan.h>
 
+#include <memory>
+#include <utility>
+#include <vector>
+#include <xutility>
+
 const char *vkut_cast_result_to_string(VkResult result);
 
 #define VKUT_THROW_IF_FAILED(EXPR) \

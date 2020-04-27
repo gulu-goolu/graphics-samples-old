@@ -10,20 +10,20 @@
 
 namespace vkut {
 class Buffer;
-using BufferPtr = std::shared_ptr<Buffer>;
+using BufferPtr = Ptr<Buffer>;
 
-class Buffer {
+class Buffer : public DeviceResource {
 public:
     static BufferPtr create(VkDeviceSize size,
         VkBufferUsageFlags usage,
         VkMemoryPropertyFlags memory_flags) {
-        return std::make_shared<Buffer>(size, usage, memory_flags);
+        return make_ptr<Buffer>(size, usage, memory_flags);
     }
 
     explicit Buffer(VkDeviceSize size,
         VkBufferUsageFlags usage,
         VkMemoryPropertyFlags memory_flags);
-    ~Buffer();
+    ~Buffer() override;
 
     [[nodiscard]] const VkBuffer &vk_buffer() const { return vk_buffer_; }
     [[nodiscard]] const VkDeviceMemory &vk_device_memory() const {
