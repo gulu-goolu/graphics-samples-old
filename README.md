@@ -8,6 +8,7 @@ requirements:
 
 ## features
 
-- 简单易用的 API，专为游戏开发或者离线渲染设计
-- 只支持 64-bit 的系统
-- 引用计数，所有对象都支持引用计数
+- 提供简单易用的 API，专用于游戏和离线渲染。
+- 只支持 64-bit 的系统。
+- buffer, image 等设备资源增加引用计数支持。
+- 为 VkPipeline, VkRenderPass 等比较复杂的对象提供相应的 Builder 类。
