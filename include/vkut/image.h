@@ -65,6 +65,12 @@ public:
         return vk_image_view_;
     }
 
+    // create color2d image view
+    static ImageViewPtr create_color2d(ImagePtr image,
+        uint32_t level,
+        uint32_t layer);
+    static ImageViewPtr create_ds2d();
+
 private:
     ImagePtr image_ptr_;
     VkImageView vk_image_view_{ VK_NULL_HANDLE };

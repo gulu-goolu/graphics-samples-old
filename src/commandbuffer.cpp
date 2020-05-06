@@ -84,4 +84,25 @@ void CommandBuffer::update_buffer(const Ptr<Buffer> &buffer,
     vkCmdUpdateBuffer(
         vk_command_buffer_, buffer->vk_buffer(), offset, size, data);
 }
+
+void CommandBuffer::pipeline_barrier(VkPipelineStageFlags src_stages,
+    VkPipelineStageFlags dst_stages,
+    VkDependencyFlags dependency_flags,
+    uint32_t memory_barrier_count,
+    const VkMemoryBarrier *memory_barriers,
+    uint32_t buffer_memory_barrier_count,
+    const VkBufferMemoryBarrier *buffer_memory_barriers,
+    uint32_t image_memory_barrier_count,
+    const VkImageMemoryBarrier *image_memory_barriers) {
+    vkCmdPipelineBarrier(vk_command_buffer_,
+        src_stages,
+        dst_stages,
+        dependency_flags,
+        memory_barrier_count,
+        memory_barriers,
+        buffer_memory_barrier_count,
+        buffer_memory_barriers,
+        image_memory_barrier_count,
+        image_memory_barriers);
+}
 }

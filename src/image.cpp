@@ -63,4 +63,20 @@ ImageView::~ImageView() {
     }
 }
 
+ImageViewPtr ImageView::create_color2d(ImagePtr image,
+    uint32_t level,
+    uint32_t layer) {
+    VkComponentMapping components = {
+        VK_COMPONENT_SWIZZLE_IDENTITY,
+        VK_COMPONENT_SWIZZLE_IDENTITY,
+        VK_COMPONENT_SWIZZLE_IDENTITY,
+        VK_COMPONENT_SWIZZLE_IDENTITY,
+    };
+    VkImageSubresourceRange range = {
+        VK_IMAGE_ASPECT_COLOR_BIT, level, 1, layer, 1
+    };
+    return make_ptr<ImageView>(
+        image, VK_IMAGE_VIEW_TYPE_2D, image->desc().format, components, range);
+}
+
 }
