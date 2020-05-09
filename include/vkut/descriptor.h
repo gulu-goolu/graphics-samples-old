@@ -14,7 +14,7 @@ class DescriptorSet;
 using DescriptorSetAllocatorPtr = Ptr<DescriptorSetAllocator>;
 using DescriptorPtr = Ptr<DescriptorSet>;
 
-class DescriptorSetAllocator : public DeviceResource {
+class DescriptorSetAllocator final : public DeviceResource {
 public:
     explicit DescriptorSetAllocator(uint32_t set_layout_binding_count,
         const VkDescriptorSetLayoutBinding *set_layout_bindings);
@@ -31,17 +31,25 @@ private:
     std::vector<VkDescriptorSet> unused_sets_;
 };
 
-class DescriptorSet {
+class DescriptorSet final : public DeviceResource {
 public:
     explicit DescriptorSet(DescriptorSetAllocatorPtr allocator);
-    ~DescriptorSet();
+    ~DescriptorSet() final;
 
     [[nodiscard]] const VkDescriptorSet &vk_descriptor_set() const {
         return vk_descriptor_set_;
     }
 
-    void write_buffer_descriptor(uint32_t binding);
+    void write_buffer_descriptor(uint32_t binding,
+        VkDescriptorType descriptor_type,
+        const Ptr<Buffer> &buffer,
+        VkDeviceSize offset,
+        VkDeviceSize range);
     void write_image_descriptor();
+
+    static Ptr<DescriptorSet> create(DescriptorSetAllocatorPtr allocator) {
+        return make_ptr<DescriptorSet>(std::move(allocator));
+    }
 
 private:
     DescriptorSetAllocatorPtr allocator_ptr_;

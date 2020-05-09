@@ -93,4 +93,27 @@ DescriptorSet::DescriptorSet(DescriptorSetAllocatorPtr allocator) :
 DescriptorSet::~DescriptorSet() {
     allocator_ptr_->free(vk_descriptor_set_);
 }
+
+void DescriptorSet::write_buffer_descriptor(uint32_t binding,
+    VkDescriptorType descriptor_type,
+    const Ptr<Buffer> &buffer,
+    VkDeviceSize offset,
+    VkDeviceSize range) {
+    VkDescriptorBufferInfo buffer_info = {};
+    buffer_info.buffer = buffer->vk_buffer();
+    buffer_info.offset = offset;
+    buffer_info.range = range;
+
+    VkWriteDescriptorSet write = {};
+    write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    write.dstSet = vk_descriptor_set_;
+    write.dstBinding = binding;
+    write.dstArrayElement = 0;
+    write.descriptorType = descriptor_type;
+    write.descriptorCount = 1;
+    write.dstArrayElement = 0;
+    write.pBufferInfo = &buffer_info;
+    vkUpdateDescriptorSets(Device::get()->vk_device(), 1, &write, 0, nullptr);
+}
+
 }

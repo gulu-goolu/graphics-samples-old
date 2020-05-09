@@ -46,8 +46,15 @@ private:
     RenderPassPtr render_pass_ptr_;
     VkFramebuffer vk_framebuffer_{ VK_NULL_HANDLE };
 
-    // creation args
+    // creation arguments
     std::vector<Ptr<ImageView>> attachments_;
+};
+
+class RenderPassBuilder {
+public:
+    void add_attachment();
+    void add_subpass();
+    void add_dependency();
 };
 
 }
