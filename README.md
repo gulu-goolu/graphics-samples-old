@@ -1,3 +1,3 @@
-# model viewer
+# graphics samples
 
-交互式三维模型查看工具
+实时渲染 demo
