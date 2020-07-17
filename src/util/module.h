@@ -6,6 +6,7 @@
 #define MODEL_VIEWER_MODEL_H
 
 #include <initializer_list>
+#include <stack>
 #include <typeinfo>
 #include <unordered_map>
 #include <utility>
@@ -13,8 +14,7 @@
 
 namespace model_viewer {
 
-class ModuleBase {
- private:
+struct IModule {
   virtual void startup() = 0;
   virtual void shutdown() = 0;
 
@@ -24,14 +24,16 @@ class ModuleBase {
 // 单例
 class ModuleManager {
  public:
-  typedef ModuleBase* (*Constructor)(void*);
+  // 模块的构造函数
+  typedef IModule* (*Constructor)(void*);
 
-  static ModuleManager* get();
+  static ModuleManager* Get();
 
   // 注册模块
   void register_module(const char* module_name, Constructor constructor,
                        size_t data_length,
                        const std::vector<std::string>& deps);
+  // 设置别名
   void bind_alias(const std::string& alias, const std::string& real);
   // 启动指定的模块，若模块已经启动，直接返回
   void* startup_module(const char* module_name);
@@ -42,28 +44,29 @@ class ModuleManager {
 
  private:
   struct ModuleInfo {
-    ModuleBase* module_ptr_{nullptr};   // 实例
-    Constructor constructor_{nullptr};  // 构造器
+    IModule* module_ptr_{nullptr};      // 实例
+    Constructor constructor_{nullptr};  // 构造函数
     size_t data_length_{0};             // 对象的长度
     std::vector<std::string> deps_;     // 依赖
   };
 
-  std::vector<std::string> startup_order_list_;               // 启动秩序
+  std::stack<std::string> startup_order_;                     // 启动顺序
   std::unordered_map<std::string, ModuleInfo> module_infos_;  // 模块
-  std::unordered_map<std::string, std::string> alias_;        // 别名
+  std::unordered_map<std::string, std::string> alias_;        // 别名映射
 
+  // 初始化指定的模块
   void prepare(const char* module_name);
 };
 
 template <typename T>
-class Module : public ModuleBase {
+class TModule : public IModule {
  public:
-  static T* get() {
+  static T* Get() {
     if (!s_module_ptr) {
       // 初始化模块
       // 调用模块的初始化函数
       s_module_ptr = reinterpret_cast<T*>(
-          ModuleManager::get()->startup_module(typeid(T).name()));
+          ModuleManager::Get()->startup_module(typeid(T).name()));
     }
     return s_module_ptr;
   }
@@ -74,7 +77,7 @@ class Module : public ModuleBase {
 };
 
 template <typename T>
-T* Module<T>::s_module_ptr{nullptr};
+T* TModule<T>::s_module_ptr{nullptr};
 
 }  // namespace model_viewer
 
@@ -83,13 +86,13 @@ T* Module<T>::s_module_ptr{nullptr};
 #define REGISTER_MODULE(NAME, ...)                                           \
   class NAME##RegisterHelper {                                               \
    public:                                                                   \
-    static ::model_viewer::ModuleBase* construct(void* block) {              \
+    static ::model_viewer::IModule* constructor(void* block) {               \
       return new (block) NAME();                                             \
     }                                                                        \
     NAME##RegisterHelper() {                                                 \
-      ::model_viewer::ModuleManager::get()->register_module(                 \
-          typeid(NAME).name(), construct, sizeof(NAME), __VA_ARGS__);        \
-      ::model_viewer::ModuleManager::get()->bind_alias(#NAME,                \
+      ::model_viewer::ModuleManager::Get()->register_module(                 \
+          typeid(NAME).name(), constructor, sizeof(NAME), __VA_ARGS__);      \
+      ::model_viewer::ModuleManager::Get()->bind_alias(#NAME,                \
                                                        typeid(NAME).name()); \
     }                                                                        \
   };                                                                         \

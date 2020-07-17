@@ -8,7 +8,7 @@
 
 namespace model_viewer {
 
-ModuleManager *ModuleManager::get() {
+ModuleManager *ModuleManager::Get() {
   static ModuleManager manager;
   return &manager;
 }
@@ -42,16 +42,17 @@ void ModuleManager::startup_all() {
 
 void ModuleManager::shutdown_all() {
   // 按调用 startup 的逆序析构
-  for (auto it = startup_order_list_.rbegin(); it != startup_order_list_.rend();
-       ++it) {
-    const auto e = module_infos_[*it];
-    if (e.module_ptr_) {
-      // 调用 shutdown 函数
-      e.module_ptr_->shutdown();
+  while (!startup_order_.empty()) {
+    auto &e = module_infos_[startup_order_.top()];
 
-      // 释放内存
-      std::free(e.module_ptr_);
-    }
+    // 销毁模块
+    e.module_ptr_->shutdown();
+
+    // 释放内存
+    std::free(e.module_ptr_);
+    e.module_ptr_ = nullptr;
+
+    startup_order_.pop();
   }
 }
 
@@ -76,7 +77,7 @@ void ModuleManager::prepare(const char *module_name) {
   e.module_ptr_ = e.constructor_(std::malloc(e.data_length_));
   e.module_ptr_->startup();
 
-  startup_order_list_.emplace_back(module_name);
+  startup_order_.push(module_name);
 }
 
 }  // namespace model_viewer

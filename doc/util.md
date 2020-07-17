@@ -1,13 +1,13 @@
 # util
 
-## Module
+## TModule
 
-Module 用来帮助定义一个模块。当我们在设计一个新模块的时候，会发现它总是会依赖于一些别的模块。如果在使用模块的时候，靠程序员手动去初始化那些被依赖的模块，很容易就会出现重复初始化或者忘记初始化的情况。为了解决此类情况，Module 就应运而生。
+TModule 用来帮助定义一个模块。当我们在设计一个新模块的时候，会发现它总是会依赖于一些别的模块。如果在使用模块的时候，靠程序员手动去初始化那些被依赖的模块，很容易就会出现重复初始化或者忘记初始化的情况。为了解决此类情况，TModule 就应运而生。
 
 定义模块，并声明依赖：
 
 ```cpp
-class GuiModule : public Module<GuiModule> {
+class GuiModule : public TModule<GuiModule> {
 private:
   void startup();
   void shutdown();
@@ -20,7 +20,7 @@ REGISTER_MODULE(GuiModule, GfxModule, AssetModule);
 
 ```cpp
 void func() {
-  // 会初始化 GuiModule 以及关联的 Module
+  // 会初始化 GuiModule 以及关联的 TModule
   auto gui = GuiModule::get();
 }
 ```
