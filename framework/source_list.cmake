@@ -3,8 +3,8 @@ set(UTIL_SOURCE_LIST
         util/module.cpp)
 
 set(GFX_SOURCE_LIST
-        gfx/vulkan_loader.h
-        gfx/vulkan_loader.cpp
+        gfx/vk_api.h
+        gfx/vk_api.cpp
         gfx/gfx_device.h
         gfx/gfx_device.cpp
         gfx/gfx_module.h

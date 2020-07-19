@@ -6,7 +6,7 @@
 
 #include <cstdio>
 
-namespace model_viewer {
+namespace framework {
 
 ModuleManager *ModuleManager::Get() {
   static ModuleManager manager;
@@ -16,11 +16,12 @@ ModuleManager *ModuleManager::Get() {
 void ModuleManager::register_module(const char *module_name,
                                     Constructor constructor, size_t data_length,
                                     const std::vector<std::string> &deps) {
-  ModuleInfo helper;
-  helper.deps_ = deps;
-  helper.constructor_ = constructor;
+  ModuleInfo info;
+  info.deps_ = deps;
+  info.constructor_ = constructor;
+  info.data_length_ = data_length;
 
-  module_infos_[module_name] = helper;
+  module_infos_[module_name] = info;
 }
 
 void ModuleManager::bind_alias(const std::string &alias,
@@ -80,4 +81,4 @@ void ModuleManager::prepare(const char *module_name) {
   startup_order_.push(module_name);
 }
 
-}  // namespace model_viewer
+}  // namespace framework

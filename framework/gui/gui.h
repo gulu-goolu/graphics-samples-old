@@ -7,7 +7,7 @@
 
 #include "../gfx/gfx.h"
 
-namespace model_viewer {
+namespace framework {
 // 初始化 GUI 模块
 void GuiInitialize();
 

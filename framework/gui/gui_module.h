@@ -7,7 +7,7 @@
 
 #include "../util/module.h"
 
-namespace model_viewer {
+namespace framework {
 class GuiModule : public TModule<GuiModule> {
  public:
   void startup() override;

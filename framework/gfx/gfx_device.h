@@ -5,9 +5,9 @@
 #ifndef MODEL_VIEWER_GFX_DEVICE_H
 #define MODEL_VIEWER_GFX_DEVICE_H
 
-#include "vulkan_loader.h"
+#include "vk_api.h"
 
-namespace model_viewer::gfx {
+namespace framework::gfx {
 // 全局设备
 class GfxDevice {
  public:

@@ -4,13 +4,6 @@
 
 #include "gfx.h"
 
-#include "vulkan_loader.h"
+#include "vk_api.h"
 
-namespace model_viewer {
-bool GfxInitialize() {
-  VulkanLoader::Startup();
-  return true;
-}
-
-void GfxTerminate() { VulkanLoader::Shutdown(); }
-}  // namespace model_viewer
+namespace framework {}  // namespace framework

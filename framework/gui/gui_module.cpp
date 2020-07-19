@@ -4,7 +4,7 @@
 
 #include "gui_module.h"
 
-namespace model_viewer {
+namespace framework {
 void GuiModule::startup() { printf("GuiModule::startup()\n"); }
 
 void GuiModule::shutdown() { printf("GuiModule::shutdown()\n"); }

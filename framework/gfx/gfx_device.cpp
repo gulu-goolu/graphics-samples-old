@@ -4,6 +4,6 @@
 
 #include "gfx_device.h"
 
-namespace model_viewer::gfx {
+namespace framework::gfx {
 GfxDevice* GfxDevice::get() { return nullptr; }
 }  // namespace model_viewer::gfx

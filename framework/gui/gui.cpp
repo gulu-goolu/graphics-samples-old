@@ -4,7 +4,7 @@
 
 #include "gui.h"
 
-namespace model_viewer {
+namespace framework {
 void GuiInitialize() {}
 
 void GuiTerminate() {}

@@ -12,7 +12,7 @@
 #include <utility>
 #include <vector>
 
-namespace model_viewer {
+namespace framework {
 
 struct IModule {
   virtual void startup() = 0;
@@ -79,23 +79,23 @@ class TModule : public IModule {
 template <typename T>
 T* TModule<T>::s_module_ptr{nullptr};
 
-}  // namespace model_viewer
+}  // namespace framework
 
 // 注册模块
 // 这里要注意命名空间
-#define REGISTER_MODULE(NAME, ...)                                           \
-  class NAME##RegisterHelper {                                               \
-   public:                                                                   \
-    static ::model_viewer::IModule* constructor(void* block) {               \
-      return new (block) NAME();                                             \
-    }                                                                        \
-    NAME##RegisterHelper() {                                                 \
-      ::model_viewer::ModuleManager::Get()->register_module(                 \
-          typeid(NAME).name(), constructor, sizeof(NAME), __VA_ARGS__);      \
-      ::model_viewer::ModuleManager::Get()->bind_alias(#NAME,                \
-                                                       typeid(NAME).name()); \
-    }                                                                        \
-  };                                                                         \
+#define REGISTER_MODULE(NAME, ...)                                        \
+  class NAME##RegisterHelper {                                            \
+   public:                                                                \
+    static ::framework::IModule* constructor(void* block) {               \
+      return new (block) NAME();                                          \
+    }                                                                     \
+    NAME##RegisterHelper() {                                              \
+      ::framework::ModuleManager::Get()->register_module(                 \
+          typeid(NAME).name(), constructor, sizeof(NAME), __VA_ARGS__);   \
+      ::framework::ModuleManager::Get()->bind_alias(#NAME,                \
+                                                    typeid(NAME).name()); \
+    }                                                                     \
+  };                                                                      \
   NAME##RegisterHelper g_##NAME##_register_helper;
 
 #endif  // MODEL_VIEWER_MODEL_H
