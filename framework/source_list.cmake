@@ -7,8 +7,10 @@ set(GFX_SOURCE_LIST
         gfx/vk_api.cpp
         gfx/gfx_module.h
         gfx/gfx_module.cpp
-        gfx/gfx_buffer.h
-        gfx/gfx_buffer.cpp
+        gfx/gfx_resource.h
+        gfx/gfx_resource.cpp
+        gfx/gfx_command_buffer.h
+        gfx/gfx_command_buffer.cpp
         gfx/gfx.h
         gfx/gfx.cpp)
 

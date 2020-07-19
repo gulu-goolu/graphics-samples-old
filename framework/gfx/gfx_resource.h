@@ -2,14 +2,18 @@
 // Created by chj on 2020/7/19.
 //
 
-#ifndef FRAMEWORK_GFX_BUFFER_H
-#define FRAMEWORK_GFX_BUFFER_H
+#ifndef FRAMEWORK_GFX_RESOURCE_H
+#define FRAMEWORK_GFX_RESOURCE_H
 
 #include <memory>
 
 #include "gfx_module.h"
 
 namespace framework {
+class GfxResource {
+ public:
+};
+
 class GfxBuffer {
  public:
   explicit GfxBuffer(VkDeviceSize size, VkBufferUsageFlags usage,
@@ -43,4 +47,4 @@ class GfxBuffer {
 };
 }  // namespace framework
 
-#endif  // FRAMEWORK_GFX_BUFFER_H
+#endif  // FRAMEWORK_GFX_RESOURCE_H

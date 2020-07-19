@@ -2,7 +2,7 @@
 // Created by chj on 2020/7/19.
 //
 
-#include "gfx_buffer.h"
+#include "gfx_resource.h"
 
 namespace framework {
 GfxBuffer::GfxBuffer(VkDeviceSize size, VkBufferUsageFlags usage,

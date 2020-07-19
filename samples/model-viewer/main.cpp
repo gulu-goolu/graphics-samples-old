@@ -3,8 +3,8 @@
 //
 
 #include <gflags/gflags.h>
-#include <gfx/gfx_buffer.h>
 #include <gfx/gfx_module.h>
+#include <gfx/gfx_resource.h>
 
 #include <cstdio>
 #include <memory>
