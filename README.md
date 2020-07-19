@@ -28,3 +28,7 @@ make -j 24
 ```
 
 在 graphics-samples/output 路径下，就是输出的目标文件
+
+## 打包
+
+通过 package.sh 将应用输出为
