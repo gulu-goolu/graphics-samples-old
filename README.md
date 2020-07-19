@@ -10,10 +10,15 @@
 
 首先配置编译环境
 
-Linux
+```bash
+# linux
+sudo apt install libwayland-dev
+```
+
+拉取代码
 
 ```bash
-sudo apt install libwayland-dev
+git clone -b master --depth=1 https://github.com/murmur-wheel/graphics-samples
 ```
 
 ```bash
@@ -22,4 +27,4 @@ cmake ..
 make -j 24
 ```
 
-然后在 graphics-samples/output 路径下，就是我们的输出文件
+在 graphics-samples/output 路径下，就是输出的目标文件
