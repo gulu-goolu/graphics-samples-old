@@ -26,9 +26,9 @@ endif ()
 
 # glslang
 FetchContent_Declare(
-    glslang
-    URL https://github.com/KhronosGroup/glslang/archive/8.13.3743.zip
-    SOURCE_DIR glslang
+        glslang
+        URL https://github.com/KhronosGroup/glslang/archive/8.13.3743.zip
+        SOURCE_DIR glslang
 )
 FetchContent_GetProperties(glslang)
 if (NOT glslang_POPULATED)
@@ -40,8 +40,8 @@ endif ()
 
 # stb
 FetchContent_Declare(
-    stb
-    GIT_REPOSITORY https://github.com/nothings/stb
+        stb
+        GIT_REPOSITORY https://github.com/nothings/stb
 )
 FetchContent_GetProperties(stb)
 if (NOT stb_POPULATED)
@@ -52,12 +52,28 @@ endif ()
 
 # glm
 FetchContent_Declare(
-    glm
-    URL https://github.com/g-truc/glm/archive/0.9.9.8.zip
-    SOURCE_DIR glm
+        glm
+        URL https://github.com/g-truc/glm/archive/0.9.9.8.zip
+        SOURCE_DIR glm
 )
 FetchContent_GetProperties(glm)
 if (NOT glm_POPULATED)
     FetchContent_Populate(glm)
     add_subdirectory(${glm_SOURCE_DIR} ${glm_BINARY_DIR})
+endif ()
+
+# tbb
+FetchContent_Declare(
+        tbb
+        URL https://github.com/oneapi-src/oneTBB/archive/v2020.0.zip
+        SOURCE_DIR tbb
+)
+FetchContent_GetProperties(tbb)
+if (NOT tbb_POPULATED)
+    FetchContent_Populate(tbb)
+    include(${tbb_SOURCE_DIR}/cmake/TBBBuild.cmake)
+    tbb_build(TBB_ROOT ${tbb_SOURCE_DIR} CONFIG_DIR TBB_DIR)
+    find_package(TBB REQUIRED tbb)
+    add_library(tbb_stub INTERFACE)
+    target_link_libraries(tbb_stub INTERFACE TBB::tbb)
 endif ()
