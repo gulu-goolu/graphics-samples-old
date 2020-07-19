@@ -26,9 +26,9 @@ endif ()
 
 # glslang
 FetchContent_Declare(
-        glslang
-        URL https://github.com/KhronosGroup/glslang/archive/8.13.3743.zip
-        SOURCE_DIR glslang
+    glslang
+    URL https://github.com/KhronosGroup/glslang/archive/8.13.3743.zip
+    SOURCE_DIR glslang
 )
 FetchContent_GetProperties(glslang)
 if (NOT glslang_POPULATED)
@@ -40,12 +40,24 @@ endif ()
 
 # stb
 FetchContent_Declare(
-        stb
-        GIT_REPOSITORY https://github.com/nothings/stb
+    stb
+    GIT_REPOSITORY https://github.com/nothings/stb
 )
 FetchContent_GetProperties(stb)
 if (NOT stb_POPULATED)
     FetchContent_Populate(stb)
     add_library(stb ${CMAKE_CURRENT_SOURCE_DIR}/stb/stb_impl.cpp)
     target_include_directories(stb PUBLIC ${stb_SOURCE_DIR})
+endif ()
+
+# glm
+FetchContent_Declare(
+    glm
+    URL https://github.com/g-truc/glm/archive/0.9.9.8.zip
+    SOURCE_DIR glm
+)
+FetchContent_GetProperties(glm)
+if (NOT glm_POPULATED)
+    FetchContent_Populate(glm)
+    add_subdirectory(${glm_SOURCE_DIR} ${glm_BINARY_DIR})
 endif ()
