@@ -37,3 +37,15 @@ if (NOT glslang_POPULATED)
     set(ENABLE_CTEST OFF CACHE BOOL "" FORCE)
     add_subdirectory(${glslang_SOURCE_DIR} ${glslang_BINARY_DIR})
 endif ()
+
+# stb
+FetchContent_Declare(
+        stb
+        GIT_REPOSITORY https://github.com/nothings/stb
+)
+FetchContent_GetProperties(stb)
+if (NOT stb_POPULATED)
+    FetchContent_Populate(stb)
+    add_library(stb ${CMAKE_CURRENT_SOURCE_DIR}/stb/stb_impl.cpp)
+    target_include_directories(stb PUBLIC ${stb_SOURCE_DIR})
+endif ()
