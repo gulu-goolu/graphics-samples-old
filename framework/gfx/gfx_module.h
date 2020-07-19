@@ -18,14 +18,24 @@ class GfxModule : public TModule<GfxModule> {
   [[nodiscard]] const VkSurfaceKhrApi& surface_khr_api() const { return surface_khr_api_; }
   [[nodiscard]] const VkSurfaceWaylandKhrApi& surface_wayland_api() const { return surface_wayland_khr_api_; }
   [[nodiscard]] const VkSwapchainKhrApi& swapchain_khr_api() const { return swapchain_khr_api_; }
-  [[nodiscard]] const VkInstance& vk_instance() const { return instance_; }
   // clang-format on
+
+  [[nodiscard]] const VkInstance& vk_instance() const { return instance_; }
+  [[nodiscard]] const VkPhysicalDevice& vk_physical_device() const {
+    return physical_device_;
+  }
+  [[nodiscard]] const VkDevice& vk_device() const { return device_; }
+
+  // 查找匹配的 memory type index，如果需要的 memory type 不存在，将会抛出异常
+  [[nodiscard]] uint32_t get_memory_type(uint32_t type_bits,
+                                         VkMemoryPropertyFlags memory_flags);
 
  protected:
   void startup() override;
   void shutdown() override;
 
   void create_instance();
+  void select_physical_device();
   void create_device();
 
   // api
@@ -39,6 +49,7 @@ class GfxModule : public TModule<GfxModule> {
 
   // resources
   VkInstance instance_{nullptr};
+  VkPhysicalDevice physical_device_{nullptr};
   VkDevice device_{nullptr};
 };
 }  // namespace framework

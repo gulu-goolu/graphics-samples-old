@@ -105,6 +105,7 @@ void vkApi_init_DeviceApi(VkDevice device,
   BIND_PROC(vkCreateBuffer);
   BIND_PROC(vkDestroyBuffer);
   BIND_PROC(vkBindBufferMemory);
+  BIND_PROC(vkGetBufferMemoryRequirements);
 
   // image
   BIND_PROC(vkCreateImage);

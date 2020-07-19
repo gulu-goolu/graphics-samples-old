@@ -97,6 +97,7 @@ struct VkDeviceApi {
   // buffer
   PFN_vkCreateBuffer vkCreateBuffer{nullptr};
   PFN_vkDestroyBuffer vkDestroyBuffer{nullptr};
+  PFN_vkGetBufferMemoryRequirements vkGetBufferMemoryRequirements{nullptr};
   PFN_vkBindBufferMemory vkBindBufferMemory{nullptr};
 
   // image
@@ -185,7 +186,7 @@ void vkApi_init_SwapchainKhrApi(VkDevice device,
                                 PFN_vkGetDeviceProcAddr vkGetDeviceProcAddr,
                                 VkSwapchainKhrApi* api_ptr);
 
-#define VK_API_THROW_IF_FAILED(EXPR)      \
+#define VK_API_CHECK_RESULT(EXPR)         \
   do {                                    \
     VkResult result = EXPR;               \
     if (result != VK_SUCCESS) {           \

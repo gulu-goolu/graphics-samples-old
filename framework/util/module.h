@@ -89,7 +89,7 @@ T* TModule<T>::s_module_ptr{nullptr};
     static ::framework::IModule* constructor(void* block) {               \
       return new (block) NAME();                                          \
     }                                                                     \
-    NAME##RegisterHelper() {                                              \
+    NAME##RegisterHelper() noexcept {                                     \
       ::framework::ModuleManager::Get()->register_module(                 \
           typeid(NAME).name(), constructor, sizeof(NAME), __VA_ARGS__);   \
       ::framework::ModuleManager::Get()->bind_alias(#NAME,                \
