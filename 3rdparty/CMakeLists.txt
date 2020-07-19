@@ -1,5 +1,8 @@
 include(FetchContent)
 
+# 统一导出第三方库
+add_library(3rdparty_stub INTERFACE)
+
 # gflags
 FetchContent_Declare(
         gflags
@@ -10,6 +13,7 @@ FetchContent_GetProperties(gflags)
 if (NOT gflags_POPULATED)
     FetchContent_Populate(gflags)
     add_subdirectory(${gflags_SOURCE_DIR} ${gflags_BINARY_DIR})
+    target_link_libraries(3rdparty_stub INTERFACE gflags::gflags)
 endif ()
 
 # Vulkan
@@ -22,6 +26,7 @@ FetchContent_GetProperties(vulkan)
 if (NOT vulkan_POPULATED)
     FetchContent_Populate(vulkan)
     add_subdirectory(${vulkan_SOURCE_DIR} ${vulkan_BINARY_DIR})
+    target_link_libraries(3rdparty_stub INTERFACE Vulkan::Headers)
 endif ()
 
 # glslang
@@ -36,6 +41,7 @@ if (NOT glslang_POPULATED)
     set(ENABLE_GLSLANG_BINARIES OFF CACHE BOOL "" FORCE)
     set(ENABLE_CTEST OFF CACHE BOOL "" FORCE)
     add_subdirectory(${glslang_SOURCE_DIR} ${glslang_BINARY_DIR})
+    target_link_libraries(3rdparty_stub INTERFACE glslang)
 endif ()
 
 # stb
@@ -48,6 +54,7 @@ if (NOT stb_POPULATED)
     FetchContent_Populate(stb)
     add_library(stb ${CMAKE_CURRENT_SOURCE_DIR}/stb/stb_impl.cpp)
     target_include_directories(stb PUBLIC ${stb_SOURCE_DIR})
+    target_link_libraries(3rdparty_stub INTERFACE stb)
 endif ()
 
 # glm
@@ -60,6 +67,7 @@ FetchContent_GetProperties(glm)
 if (NOT glm_POPULATED)
     FetchContent_Populate(glm)
     add_subdirectory(${glm_SOURCE_DIR} ${glm_BINARY_DIR})
+    target_link_libraries(3rdparty_stub INTERFACE glm)
 endif ()
 
 # tbb
@@ -74,6 +82,5 @@ if (NOT tbb_POPULATED)
     include(${tbb_SOURCE_DIR}/cmake/TBBBuild.cmake)
     tbb_build(TBB_ROOT ${tbb_SOURCE_DIR} CONFIG_DIR TBB_DIR)
     find_package(TBB REQUIRED tbb)
-    add_library(tbb_stub INTERFACE)
-    target_link_libraries(tbb_stub INTERFACE TBB::tbb)
+    target_link_libraries(3rdparty_stub INTERFACE TBB::tbb)
 endif ()
