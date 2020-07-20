@@ -1,6 +1,9 @@
 set(UTIL_SOURCE_LIST
+        util/macros.h
         util/module.h
-        util/module.cpp)
+        util/module.cpp
+        util/sync.h
+        util/sync.cpp)
 
 set(GFX_SOURCE_LIST
         gfx/vk_api.h
