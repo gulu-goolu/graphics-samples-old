@@ -33,6 +33,17 @@ class Semaphore {
   void wait();
   void signal();
 
+  class Guard {
+   public:
+    MARK_NO_COPY(Guard)
+
+    explicit Guard(Semaphore& s) : s_(s) { s_.wait(); }
+    ~Guard() { s_.signal(); }
+
+   private:
+    Semaphore& s_;
+  };
+
  private:
   std::atomic<bool> flag_{true};
   std::mutex mtx_;

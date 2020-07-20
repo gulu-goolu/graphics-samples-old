@@ -146,6 +146,11 @@ void vkApi_init_DeviceApi(VkDevice device,
   BIND_PROC(vkCmdBlitImage);
   BIND_PROC(vkCmdResolveImage);
   BIND_PROC(vkCmdUpdateBuffer);
+
+  // queue
+  BIND_PROC(vkGetDeviceQueue);
+  BIND_PROC(vkQueueWaitIdle);
+  BIND_PROC(vkQueueSubmit);
 #undef BIND_PROC
   // clang-format on
 }

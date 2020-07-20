@@ -45,6 +45,64 @@ uint32_t GfxModule::get_memory_type(uint32_t type_bits,
   return type_index;
 }
 
+VkCommandBuffer GfxModule::begin_command_buffer(uint32_t family_index) {
+  Semaphore::Guard sem_guard(device_sem_);
+
+  if (transient_command_pools_[family_index] == VK_NULL_HANDLE) {
+    VkCommandPoolCreateInfo command_pool_create_info = {};
+    command_pool_create_info.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+    command_pool_create_info.queueFamilyIndex = family_index;
+    VK_API_CHECK_RESULT(device_api_.vkCreateCommandPool(
+        vk_device_, &command_pool_create_info, nullptr,
+        &transient_command_pools_[family_index]));
+  }
+
+  VkCommandBuffer command_buffer{VK_NULL_HANDLE};
+  // clang-format off
+  VkCommandBufferAllocateInfo command_buffer_allocate_info = {};
+  command_buffer_allocate_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+  command_buffer_allocate_info.commandPool = transient_command_pools_[family_index];
+  command_buffer_allocate_info.commandBufferCount = 1;
+  command_buffer_allocate_info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+  // clang-format on
+  VK_API_CHECK_RESULT(device_api_.vkAllocateCommandBuffers(
+      vk_device_, &command_buffer_allocate_info, &command_buffer));
+
+  // 更新 command buffer 状态
+  VkCommandBufferBeginInfo command_buffer_begin_info = {};
+  command_buffer_begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+  VK_API_CHECK_RESULT(device_api_.vkBeginCommandBuffer(
+      command_buffer, &command_buffer_begin_info));
+
+  transient_command_buffers_[command_buffer] = family_index;
+
+  return command_buffer;
+}
+
+void GfxModule::flush_command_buffers(VkCommandBuffer command_buffer) {
+  Semaphore::Guard sem(device_sem_);
+
+  VK_API_CHECK_RESULT(device_api_.vkEndCommandBuffer(command_buffer));
+
+  uint32_t family_index = transient_command_buffers_[command_buffer];
+  VkQueue queue{VK_NULL_HANDLE};
+  device_api_.vkGetDeviceQueue(vk_device_, family_index, 0, &queue);
+
+  // 提交，并等待执行完成
+  VkSubmitInfo submit_info = {};
+  submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+  submit_info.commandBufferCount = 1;
+  submit_info.pCommandBuffers = &command_buffer;
+  VK_API_CHECK_RESULT(
+      device_api_.vkQueueSubmit(queue, 1, &submit_info, VK_NULL_HANDLE));
+  VK_API_CHECK_RESULT(device_api_.vkQueueWaitIdle(queue));
+
+  // 释放资源
+  device_api_.vkFreeCommandBuffers(
+      vk_device_, transient_command_pools_[family_index], 1, &command_buffer);
+  transient_command_buffers_.erase(command_buffer);
+}
+
 void GfxModule::startup() {
   // 导入 api
   // clang-format off

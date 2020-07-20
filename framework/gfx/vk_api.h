@@ -139,6 +139,11 @@ struct VkDeviceApi {
   PFN_vkCmdBlitImage vkCmdBlitImage{nullptr};
   PFN_vkCmdResolveImage vkCmdResolveImage{nullptr};
   PFN_vkCmdUpdateBuffer vkCmdUpdateBuffer{nullptr};
+
+  // queue
+  PFN_vkGetDeviceQueue vkGetDeviceQueue{nullptr};
+  PFN_vkQueueWaitIdle vkQueueWaitIdle{nullptr};
+  PFN_vkQueueSubmit vkQueueSubmit{nullptr};
   // clang-format on
 };
 

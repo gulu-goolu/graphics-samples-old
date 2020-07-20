@@ -5,7 +5,9 @@
 #ifndef FRAMEWORK_GFX_MODULE_H
 #define FRAMEWORK_GFX_MODULE_H
 
-#include "../util/module.h"
+#include <util/module.h>
+#include <util/sync.h>
+
 #include "vk_api.h"
 
 namespace framework {
@@ -33,6 +35,10 @@ class GfxModule : public TModule<GfxModule> {
   [[nodiscard]] uint32_t get_memory_type(uint32_t type_bits,
                                          VkMemoryPropertyFlags memory_flags);
 
+  // 获取一个 transient command buffer
+  [[nodiscard]] VkCommandBuffer begin_command_buffer(uint32_t family_index);
+  void flush_command_buffers(VkCommandBuffer command_buffer);
+
  protected:
   void startup() override;
   void shutdown() override;
@@ -55,6 +61,10 @@ class GfxModule : public TModule<GfxModule> {
   VkPhysicalDevice vk_physical_device_{nullptr};
   uint32_t graphics_queue_family_index_{0};
   VkDevice vk_device_{nullptr};
+
+  Semaphore device_sem_;
+  std::unordered_map<uint32_t, VkCommandPool> transient_command_pools_;
+  std::unordered_map<VkCommandBuffer, uint32_t> transient_command_buffers_;
 };
 }  // namespace framework
 
