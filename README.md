@@ -2,9 +2,10 @@
 
 ## 内容
 
-- 一个图形应用框架
-- api 示例
-- 图形 demo
+- 3rdparty 第三方库
+- frameworks 基础框架，图形 API 封装，图形应用框架
+- samples 图形 demo
+- doc 文档
 
 ## 构建
 
@@ -31,4 +32,4 @@ make -j 24
 
 ## 打包
 
-通过 package.sh 将应用输出为
+支持 linux, windows, 和 android 平台
