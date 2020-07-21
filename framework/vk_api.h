@@ -23,6 +23,7 @@ struct VkRegistryApi {
 
 struct VkInstanceApi {
   // clang-format off
+  PFN_vkGetInstanceProcAddr vkGetInstanceProcAddr{nullptr};
   PFN_vkDestroyInstance vkDestroyInstance{nullptr};
   PFN_vkEnumeratePhysicalDevices vkEnumeratePhysicalDevices{nullptr};
   PFN_vkEnumeratePhysicalDeviceGroups vkEnumeratePhysicalDeviceGroups{nullptr};
@@ -159,7 +160,7 @@ struct VkSurfaceKhrApi {
 
 struct VkSurfaceWaylandKhrApi {
 #ifdef VK_USE_PLATFORM_WAYLAND_KHR
-  PFN_vkCreateSurfaceWaylandKHR vkCreateSurfaceWaylandKHR{nullptr};
+  PFN_vkCreateWaylandSurfaceKHR vkCreateWaylandSurfaceKHR{nullptr};
 #endif
 };
 
@@ -185,7 +186,7 @@ void vkApi_init_SurfaceKhrApi(VkInstance instance,
                               PFN_vkGetInstanceProcAddr vkGetInstanceProcAddr,
                               VkSurfaceKhrApi* api_ptr);
 void vkApi_init_SurfaceWaylandKhrApi(
-    VkInstanceApi instance, PFN_vkGetInstanceProcAddr vkGetInstanceProcAddr,
+    VkInstance instance, PFN_vkGetInstanceProcAddr vkGetInstanceProcAddr,
     VkSurfaceWaylandKhrApi* api_ptr);
 void vkApi_init_SwapchainKhrApi(VkDevice device,
                                 PFN_vkGetDeviceProcAddr vkGetDeviceProcAddr,

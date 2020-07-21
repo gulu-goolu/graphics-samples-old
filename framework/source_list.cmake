@@ -1,13 +1,13 @@
 set(UTIL_SOURCE_LIST
-        util/macros.h
         util/module.h
         util/module.cpp
-        util/sync.h
-        util/sync.cpp)
+        )
+
+set(APP_SOURCE_LIST
+        app/app_module.h
+        app/app_module.cpp)
 
 set(GFX_SOURCE_LIST
-        gfx/vk_api.h
-        gfx/vk_api.cpp
         gfx/gfx_module.h
         gfx/gfx_module.cpp
         gfx/gfx_resource.h
@@ -24,6 +24,17 @@ set(GUI_SOURCE_LIST
         gui/gui.cpp)
 
 set(SOURCE_LIST
+        util.h
+        util.cpp
+        vk_api.h
+        vk_api.cpp
+        device.h
+        device.cpp
+        platform.h
+        platform.cpp
+        app.h
+        app.cpp
         ${UTIL_SOURCE_LIST}
+        ${APP_SOURCE_LIST}
         ${GFX_SOURCE_LIST}
         ${GUI_SOURCE_LIST})

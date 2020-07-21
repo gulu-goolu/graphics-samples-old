@@ -1,15 +1,19 @@
 //
-// Created by chj on 2020/7/20.
+// Created by chj on 2020/7/21.
 //
 
-#ifndef FRAMEWORK_SYNC_H
-#define FRAMEWORK_SYNC_H
+#ifndef FRAMEWORK_UTIL_H
+#define FRAMEWORK_UTIL_H
 
 #include <atomic>
 #include <condition_variable>
 #include <mutex>
 
-#include "macros.h"
+#define MARK_NO_COPY(CLASS)                \
+  CLASS(const CLASS&) = delete;            \
+  CLASS(CLASS&&) = delete;                 \
+  CLASS& operator=(const CLASS&) = delete; \
+  CLASS& operator=(CLASS&&) = delete;
 
 namespace framework {
 class WaitGroup {
@@ -51,4 +55,4 @@ class Semaphore {
 };
 }  // namespace framework
 
-#endif  // FRAMEWORK_SYNC_H
+#endif  // FRAMEWORK_UTIL_H

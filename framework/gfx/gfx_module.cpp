@@ -127,7 +127,7 @@ void GfxModule::startup() {
                          &instance_api_);
   vkApi_init_SurfaceKhrApi(vk_instance_, registry_api_.vkGetInstanceProcAddr,
                            &surface_khr_api_);
-  vkApi_init_SurfaceWaylandKhrApi(instance_api_,
+  vkApi_init_SurfaceWaylandKhrApi(vk_instance_,
                                   registry_api_.vkGetInstanceProcAddr,
                                   &surface_wayland_khr_api_);
   vkApi_init_SwapchainKhrApi(vk_device_, instance_api_.vkGetDeviceProcAddr,

@@ -24,6 +24,7 @@ void vkApi_init_RegistryApi(PFN_vkGetInstanceProcAddr vkGetInstanceProcAddr,
 void vkApi_init_InstanceApi(VkInstance instance,
                             PFN_vkGetInstanceProcAddr vkGetInstanceProcAddr,
                             VkInstanceApi* api_ptr) {
+  api_ptr->vkGetInstanceProcAddr = vkGetInstanceProcAddr;
   // clang-format off
 #define BIND_PROC(NAME) api_ptr->NAME = reinterpret_cast<PFN_##NAME>(vkGetInstanceProcAddr(instance, #NAME))
   BIND_PROC(vkDestroyInstance);
@@ -170,12 +171,12 @@ void vkApi_init_SurfaceKhrApi(VkInstance instance,
 }
 
 void vkApi_init_SurfaceWaylandKhrApi(
-    VkInstanceApi instance, PFN_vkGetInstanceProcAddr vkGetInstanceProcAddr,
+    VkInstance instance, PFN_vkGetInstanceProcAddr vkGetInstanceProcAddr,
     VkSurfaceWaylandKhrApi* api_ptr) {
   // clang-format off
 #define BIND_PROC(NAME) api_ptr->NAME = reinterpret_cast<PFN_##NAME>(vkGetInstanceProcAddr(instance, #NAME))
 #ifdef VK_USE_PLATFORM_WAYLAND_KHR
-  BIND_PROC(vkCreateSurfaceWaylandKHR);
+  BIND_PROC(vkCreateWaylandSurfaceKHR);
 #endif
 #undef BIND_PROC
   // clang-format on

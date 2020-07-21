@@ -5,8 +5,8 @@
 #ifndef FRAMEWORK_GFX_MODULE_H
 #define FRAMEWORK_GFX_MODULE_H
 
+#include <util.h>
 #include <util/module.h>
-#include <util/sync.h>
 
 #include "vk_api.h"
 
