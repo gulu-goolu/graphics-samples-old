@@ -8,6 +8,7 @@
 #include <atomic>
 #include <condition_variable>
 #include <mutex>
+#include <queue>
 
 #define MARK_NO_COPY(CLASS)                \
   CLASS(const CLASS&) = delete;            \
@@ -52,6 +53,19 @@ class Semaphore {
   std::atomic<bool> flag_{true};
   std::mutex mtx_;
   std::condition_variable cv_;
+};
+
+struct FrameProfiler {
+  static const uint32_t MAX_FRAME_COUNT = 64;
+
+  [[nodiscard]] float fps() const { return fps_; }
+  float add();
+
+ private:
+  int32_t head_{0}, tail_{0};
+  std::array<uint64_t, MAX_FRAME_COUNT> history_{};
+
+  float fps_ = 0.0f;
 };
 }  // namespace framework
 

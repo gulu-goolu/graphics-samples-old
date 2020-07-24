@@ -30,4 +30,10 @@ void Semaphore::signal() {
   flag_ = true;
   cv_.notify_one();
 }
+
+float FrameProfiler::add() {
+  auto tp = std::chrono::steady_clock::now().time_since_epoch().count();
+
+  return 0;
+}
 }  // namespace framework
