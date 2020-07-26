@@ -107,4 +107,69 @@ class WaylandPlatform : public IPlatform {
 REGISTER_PLATFORM(WaylandPlatform, "wayland");
 #endif
 
+#ifdef VK_USE_PLATFORM_XLIB_KHR
+#include <X11/Xutil.h>
+#include <X11/keysymdef.h>
+class XlibPlatform : public IPlatform {
+ public:
+  XlibPlatform(const char* title, int width, int height) {
+    display_ = XOpenDisplay(nullptr);
+    if (!display_) {
+      printf("%s\n", "Could not open dislay\n");
+      exit(1);
+    }
+
+    Screen* screen = DefaultScreenOfDisplay(display_);
+    int screen_id = DefaultScreen(display_);
+
+    window_ = XCreateSimpleWindow(
+        display_, RootWindowOfScreen(screen), 0, 0, width, height, 1,
+        BlackPixel(display_, screen_id), WhitePixel(display_, screen_id));
+    XClearWindow(display_, window_);
+    XMapRaised(display_, window_);
+
+    XSetWindowAttributes attributes;
+    XChangeWindowAttributes(display_, window_, 0, &attributes);
+  }
+  ~XlibPlatform() override {
+    XDestroyWindow(display_, window_);
+    XCloseDisplay(display_);
+  }
+
+  bool process_events(IEventHandler* event_handler) override {
+    XEvent event;
+    while (XPending(display_) > 0) {
+      XNextEvent(display_, &event);
+    }
+
+    return event.type != DestroyNotify;
+  }
+
+  std::vector<std::string> get_required_extensions() override {
+    std::vector<std::string> extensions;
+    extensions.emplace_back(VK_KHR_SURFACE_EXTENSION_NAME);
+    extensions.emplace_back(VK_KHR_XLIB_SURFACE_EXTENSION_NAME);
+    return extensions;
+  }
+  VkSurfaceKHR create_surface(VkInstance instance,
+                              const VkInstanceApi& api) override {
+    auto vkCreateXlibSurfaceKHR = reinterpret_cast<PFN_vkCreateXlibSurfaceKHR>(
+        api.vkGetInstanceProcAddr(instance, "vkCreateXlibSurfaceKHR"));
+
+    VkSurfaceKHR surface{nullptr};
+    VkXlibSurfaceCreateInfoKHR create_info = {};
+    create_info.sType = VK_STRUCTURE_TYPE_XLIB_SURFACE_CREATE_INFO_KHR;
+    create_info.dpy = display_;
+    create_info.window = window_;
+    VK_API_CHECK_RESULT(
+        vkCreateXlibSurfaceKHR(instance, &create_info, nullptr, &surface));
+    return surface;
+  }
+
+  Display* display_{nullptr};
+  Window window_{0};
+};
+REGISTER_PLATFORM(XlibPlatform, "X11");
+#endif
+
 }  // namespace framework
